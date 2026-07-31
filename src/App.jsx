@@ -4,6 +4,7 @@ import carImage from "./assets/car.png";
 
 function App() {
   const [showForm, setShowForm] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -15,6 +16,7 @@ function App() {
 
   const DISPLAY_PHONE = "8825625498"; // shown on website
   const DISPLAY_EMAIL = "harsharaja505@gmail.com"; // shown on website
+  const ACCESS_KEY = "426a3361-bb95-4f68-80b5-c2d94f10684f"; // Web3Forms key
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,16 +28,21 @@ function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     const formData = new FormData();
 
-    formData.append("access_key", "426a3361-bb95-4f68-80b5-c2d94f10684f");
+    formData.append("access_key", ACCESS_KEY);
+    formData.append("subject", "New Car Consultation Request - Harsha Car Advisor");
+    formData.append("from_name", "Harsha Car Advisor Website");
+    formData.append("redirect", "false"); // stay on page
     formData.append("name", form.name);
     formData.append("email", form.email);
-    formData.append("phone", form.phone);
+    formData.append("phone", `+91${form.phone}`);
     formData.append("budget", form.budget);
     formData.append("car_type", form.carType);
     formData.append("message", form.message);
+    formData.append("botcheck", ""); // honeypot spam protection
 
     try {
       const response = await fetch("https://api.web3forms.com/submit", {
@@ -46,28 +53,26 @@ function App() {
       const result = await response.json();
 
       if (result.success) {
-        alert("Thank you! Your consultation request has been sent.");
-
-        setForm({
-          name: "",
-          email: "",
-          phone: "",
-          budget: "",
-          carType: "",
-          message: "",
-        });
-
+        alert(`Thank you ${form.name}! Your consultation request has been sent. I'll reply within 24 hours.`);
+        setForm({ name: "", email: "", phone: "", budget: "", carType: "", message: "" });
         setShowForm(false);
       } else {
-        alert(result.message);
+        alert(result.message || "Failed to send. Please try again.");
       }
     } catch (error) {
       console.error(error);
-      alert("Something went wrong. Please try again.");
+      alert("Network error. Please check your internet and try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
-  const isFormValid = form.name && form.email && form.phone.length === 10 && form.budget;
+  const isFormValid = 
+    form.name.trim().length > 1 && 
+    form.email.includes("@") && 
+    form.email.includes(".") &&
+    form.phone.length === 10 && 
+    form.budget;
 
   return (
     <>
@@ -158,40 +163,11 @@ function App() {
             <h2>Get Free Car Consultation</h2>
             <p style={{ marginBottom: "1rem", color: "#666" }}>I'll reply within 24 hours</p>
             <form onSubmit={handleSubmit}>
-
-              <input
-                type="hidden"
-                name="subject"
-                value="New Car Consultation Request"
-              />
-
-              <input
-                type="text"
-                name="name"
-                placeholder="Your Name"
-                value={form.name}
-                onChange={handleChange}
-                required
-              />
-
-              <input
-                type="email"
-                name="email"
-                placeholder="Email Address"
-                value={form.email}
-                onChange={handleChange}
-                required
-              />
-
-              <input
-                type="tel"
-                name="phone"
-                placeholder="Phone Number"
-                value={form.phone}
-                onChange={handleChange}
-                required
-              />
-             
+              
+              <input type="text" name="name" placeholder="Your Name" value={form.name} onChange={handleChange} required minLength="2" />
+              <input type="email" name="email" placeholder="Email Address" value={form.email} onChange={handleChange} required />
+              <input type="tel" name="phone" placeholder="Phone Number - 10 digits" value={form.phone} onChange={handleChange} required />
+              
               <select name="budget" value={form.budget} onChange={handleChange} required>
                 <option value="">Select Budget</option>
                 <option>Under 5 Lakhs</option>
@@ -199,15 +175,18 @@ function App() {
                 <option>10-20 Lakhs</option>
                 <option>20 Lakhs+</option>
               </select>
+
               <select name="carType" value={form.carType} onChange={handleChange}>
                 <option value="">New or Used Car?</option>
                 <option>New Car</option>
                 <option>Used Car</option>
                 <option>Not Sure</option>
               </select>
+
               <textarea name="message" placeholder="What car are you looking for?" rows="3" value={form.message} onChange={handleChange}></textarea>
-              <button type="submit" className="primary-btn" disabled={!isFormValid}>
-                Submit Request
+              
+              <button type="submit" className="primary-btn" disabled={!isFormValid || loading}>
+                {loading ? "Sending..." : "Submit Request"}
               </button>
             </form>
           </div>
@@ -216,6 +195,10 @@ function App() {
 
       <footer>
         <p>© 2026 Harsha Car Advisor. All Rights Reserved.</p>
+        <p style={{ marginTop: "8px", fontSize: "14px", color: "#9ca3af" }}>
+          <a href={`tel:+91${DISPLAY_PHONE}`} style={{ color: "#9ca3af" }}>+91 {DISPLAY_PHONE}</a> | 
+          <a href={`mailto:${DISPLAY_EMAIL}`} style={{ color: "#9ca3af" }}> {DISPLAY_EMAIL}</a>
+        </p>
       </footer>
     </>
   );
