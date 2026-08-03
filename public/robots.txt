@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://harsha-car-advisor.netlify.app/sitemap.xml
