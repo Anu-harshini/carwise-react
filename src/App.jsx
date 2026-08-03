@@ -17,6 +17,7 @@ function App() {
   const DISPLAY_PHONE = "8825625498"; // shown on website
   const DISPLAY_EMAIL = "harsharaja505@gmail.com"; // shown on website
   const ACCESS_KEY = "426a3361-bb95-4f68-80b5-c2d94f10684f"; // Web3Forms key
+  const GMB_REVIEW_LINK = "https://g.page/r/CSRcafnSZi6mEAE/review";
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,18 +32,17 @@ function App() {
     setLoading(true);
 
     const formData = new FormData();
-
     formData.append("access_key", ACCESS_KEY);
     formData.append("subject", "New Car Consultation Request - Harsha Car Advisor");
     formData.append("from_name", "Harsha Car Advisor Website");
-    formData.append("redirect", "false"); // stay on page
+    formData.append("redirect", "false");
     formData.append("name", form.name);
     formData.append("email", form.email);
     formData.append("phone", `+91${form.phone}`);
     formData.append("budget", form.budget);
     formData.append("car_type", form.carType);
     formData.append("message", form.message);
-    formData.append("botcheck", ""); // honeypot spam protection
+    formData.append("botcheck", "");
 
     try {
       const response = await fetch("https://api.web3forms.com/submit", {
@@ -83,6 +83,7 @@ function App() {
           <li><a href="#why">Why Choose Us</a></li>
           <li><a href="#services">Services</a></li>
           <li><a href="#how">How It Works</a></li>
+          <li><a href="#reviews">Reviews</a></li> {/* Added this */}
           <li><a href="#about">About</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>
@@ -137,6 +138,37 @@ function App() {
         </div>
       </section>
 
+      {/* REVIEWS SECTION - ADDED HERE */}
+      <section className="reviews" id="reviews" style={{padding:"60px 20px", background:"#f8f9fa"}}>
+        <h2 style={{textAlign:"center", fontSize:"32px", marginBottom:"10px"}}>What Our Customers Say</h2>
+        <p style={{textAlign:"center", color:"#666", marginBottom:"40px"}}>Real feedback from people we helped in Tamil Nadu</p>
+        
+        <div style={{maxWidth:"900px", margin:"auto", display:"grid", gap:"20px"}}>
+          {[
+            {name:"Harini Sundar", text:"Good service and quick support. Helped me understand which car suits my needs."},
+            {name:"Chitukuru Priya", text:"Friendly staff and excellent customer service. Harsha was knowledgeable and helped me choose the right car. Thank you!"},
+            {name:"Jayasree B S", text:"The consultation was detailed and extremely helpful. Their recommendations were very useful based on budget and requirements. Overall, it was a great experience."},
+            {name:"Selva Keerthana", text:"I liked the way everything was explained. It made choosing a car much easier."},
+            {name:"Sangeetha D", text:"Great experience. Honest suggestions based on my budget. Highly recommended."},
+            {name:"Subashini B", text:"I received clear guidance based on my budget and requirements. The advice was genuine and saved me a lot of time researching. Keep going!!"},
+            {name:"Keerthi Priya M S", text:"Very professional and honest service"},
+            {name:"Baskaran R", text:"Harsha helped me find the right car. Very professional and honest service"}
+          ].map((review, i) => (
+            <div key={i} style={{background:"white", padding:"25px", borderRadius:"12px", boxShadow:"0 2px 10px rgba(0,0,0,0.06)"}}>
+              <p style={{margin:"0 0 12px 0", fontSize:"16px", lineHeight:"1.6"}}>"{review.text}"</p>
+              <strong style={{color:"#333"}}>- {review.name}</strong>
+            </div>
+          ))}
+        </div>
+
+        <div style={{textAlign:"center", marginTop:"40px"}}>
+          <a href={GMB_REVIEW_LINK} target="_blank" style={{display:"inline-block", padding:"15px 35px", background:"#4285F4", color:"white", textDecoration:"none", borderRadius:"10px", fontSize:"18px", fontWeight:"bold"}}>
+            ⭐ Leave us a Google Review
+          </a>
+          <p style={{fontSize:"14px", color:"#777", marginTop:"10px"}}>Takes only 30 seconds</p>
+        </div>
+      </section>
+
       <section className="about" id="about">
         <h2>About Us</h2>
         <p>At <strong>Harsha Car Advisor</strong>, we provide independent car-buying consultation to help customers make informed decisions. We are not affiliated with any dealership or car brand.</p>
@@ -163,11 +195,9 @@ function App() {
             <h2>Get Free Car Consultation</h2>
             <p style={{ marginBottom: "1rem", color: "#666" }}>I'll reply within 24 hours</p>
             <form onSubmit={handleSubmit}>
-              
               <input type="text" name="name" placeholder="Your Name" value={form.name} onChange={handleChange} required minLength="2" />
               <input type="email" name="email" placeholder="Email Address" value={form.email} onChange={handleChange} required />
               <input type="tel" name="phone" placeholder="Phone Number - 10 digits" value={form.phone} onChange={handleChange} required />
-              
               <select name="budget" value={form.budget} onChange={handleChange} required>
                 <option value="">Select Budget</option>
                 <option>Under 5 Lakhs</option>
@@ -175,16 +205,13 @@ function App() {
                 <option>10-20 Lakhs</option>
                 <option>20 Lakhs+</option>
               </select>
-
               <select name="carType" value={form.carType} onChange={handleChange}>
                 <option value="">New or Used Car?</option>
                 <option>New Car</option>
                 <option>Used Car</option>
                 <option>Not Sure</option>
               </select>
-
               <textarea name="message" placeholder="What car are you looking for?" rows="3" value={form.message} onChange={handleChange}></textarea>
-              
               <button type="submit" className="primary-btn" disabled={!isFormValid || loading}>
                 {loading ? "Sending..." : "Submit Request"}
               </button>
