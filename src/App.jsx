@@ -13,22 +13,20 @@ function App() {
     message: ""
   });
 
-  const DISPLAY_PHONE = "8825625498"; // shown on website
-  const DISPLAY_EMAIL = "harsharaja505@gmail.com"; // shown on website
+  const DISPLAY_PHONE = "8825625498";
+  const DISPLAY_EMAIL = "harsharaja505@gmail.com";
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "phone") {
-      if (!/^\d{0,10}$/.test(value)) return; // only numbers, max 10
+      if (!/^\d{0,10}$/.test(value)) return;
     }
     setForm({...form, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const formData = new FormData();
-
     formData.append("access_key", "426a3361-bb95-4f68-80b5-c2d94f10684f");
     formData.append("name", form.name);
     formData.append("email", form.email);
@@ -36,27 +34,15 @@ function App() {
     formData.append("budget", form.budget);
     formData.append("car_type", form.carType);
     formData.append("message", form.message);
-
     try {
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         body: formData,
       });
-
       const result = await response.json();
-
       if (result.success) {
         alert("Thank you! Your consultation request has been sent.");
-
-        setForm({
-          name: "",
-          email: "",
-          phone: "",
-          budget: "",
-          carType: "",
-          message: "",
-        });
-
+        setForm({ name: "", email: "", phone: "", budget: "", carType: "", message: "" });
         setShowForm(false);
       } else {
         alert(result.message);
@@ -102,23 +88,68 @@ function App() {
         </div>
       </div>
 
-      <section className="why" id="why">
-        <h2>Why People Trust Harsha Car Advisor</h2>
-        <div className="cards">
-          <div className="card"><h3>✅ Unbiased Recommendations</h3><p>We recommend cars based on your needs—not dealership promotions.</p></div>
-          <div className="card"><h3>🚗 New & Used Car Guidance</h3><p>Expert guidance whether you're buying a brand-new or used car.</p></div>
-          <div className="card"><h3>💰 Budget-Based Suggestions</h3><p>Find the best cars that match your budget and lifestyle.</p></div>
-          <div className="card"><h3>🛡️ Safety & Maintenance Comparison</h3><p>Compare safety ratings, maintenance costs, mileage and resale value.</p></div>
-        </div>
-      </section>
-
       <section className="services" id="services">
-        <h2>Our Services</h2>
+        <h2>Car Buying Advisory</h2>
         <div className="cards">
           <div className="card"><h3>🚘 New Car Consultation</h3><p>Get the best new car recommendations based on your budget and requirements.</p></div>
           <div className="card"><h3>🚙 Used Car Consultation</h3><p>Know which used cars are worth buying and which ones to avoid.</p></div>
           <div className="card"><h3>📊 Car Comparison</h3><p>Compare cars based on price, mileage, safety, features and maintenance.</p></div>
           <div className="card"><h3>💰 Budget Planning</h3><p>We'll help you decide the ideal budget before purchasing your car.</p></div>
+        </div>
+      </section>
+
+    <section id="premium-care">
+      <h2>PREMIUM CAR CARE &amp; STYLING SERVICES</h2>
+      <p className="section-subtitle">Protect the Finish. Enhance the Shine. Define Your Style.</p>
+      <p className="premium-love">More Than Car Care. It's About Preserving What You Love.</p>
+      <p className="section-desc">Whether you want to protect your original paint, achieve an extraordinary shine or completely transform your vehicle's appearance, we have a solution for you.</p>
+      <p className="premium-closing">Your Car. Our Expertise. A Finish Worth Admiring.</p>
+
+      <div className="cards premium-cards">
+        <div className="card premium-card">
+          <div className="premium-icon">🛡️</div>
+          <h3>Paint Protection Film (PPF)</h3>
+          <div className="premium-line"></div>
+          <p>Invisible layer to shield paint from scratches, chips &amp; environmental damage.</p>
+        </div>
+
+        <div className="card premium-card">
+          <div className="premium-icon">💧</div>
+          <h3>Ceramic Coating</h3>
+          <div className="premium-line"></div>
+          <p>Hydrophobic coating for long-lasting shine and easy cleaning.</p>
+        </div>
+
+        <div className="card premium-card">
+          <div className="premium-icon">⬡</div>
+          <h3>Graphene Coating</h3>
+          <div className="premium-line"></div>
+          <p>Advanced coating offering superior heat and scratch resistance.</p>
+        </div>
+
+        <div className="card premium-card">
+          <div className="premium-icon">🖌️</div>
+          <h3>Teflon Coating</h3>
+          <div className="premium-line"></div>
+          <p>Creates a smooth protective layer to repel dust, dirt &amp; water.</p>
+        </div>
+
+        <div className="card premium-card">
+          <div className="premium-icon">🎨</div>
+          <h3>Car Wrapping</h3>
+          <div className="premium-line"></div>
+          <p>Custom vinyl wraps to transform style and protect original paint.</p>
+        </div>
+      </div>
+    </section>
+
+      <section className="why" id="why">
+        <h2>Why People Trust Harsha Car Advisor</h2>
+        <div className="cards">
+          <div className="card"><h3>✅ Unbiased Recommendations</h3><p>We recommend cars based on your needs—not dealership promotions.</p></div>
+          <div className="card"><h3>🚗 New & Used Car Guidance</h3><p>Expert guidance whether you&apos;re buying a brand-new or used car.</p></div>
+          <div className="card"><h3>💰 Budget-Based Suggestions</h3><p>Find the best cars that match your budget and lifestyle.</p></div>
+          <div className="card"><h3>🛡️ Safety & Maintenance Comparison</h3><p>Compare safety ratings, maintenance costs, mileage and resale value.</p></div>
         </div>
       </section>
 
@@ -139,59 +170,22 @@ function App() {
 
       <section className="contact" id="contact">
         <h2>Contact Us</h2>
-        <p>
-          <a href={`tel:+91${DISPLAY_PHONE}`}>
-            📞 Phone: +91 {DISPLAY_PHONE}
-          </a>
-        </p>
-        <p>
-          <a href={`mailto:${DISPLAY_EMAIL}`}>📧 Email: {DISPLAY_EMAIL}</a>
-        </p>
+        <p><a href={`tel:+91${DISPLAY_PHONE}`}>📞 Phone: +91 {DISPLAY_PHONE}</a></p>
+        <p><a href={`mailto:${DISPLAY_EMAIL}`}>📧 Email: {DISPLAY_EMAIL}</a></p>
         <p>📍 Tamil Nadu, India</p>
       </section>
 
-      {/* POPUP CONSULTATION FORM */}
       {showForm && (
         <div className="modal" onClick={() => setShowForm(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <span className="close" onClick={() => setShowForm(false)}>×</span>
             <h2>Get Free Car Consultation</h2>
-            <p style={{ marginBottom: "1rem", color: "#666" }}>I'll reply within 24 hours</p>
+            <p style={{ marginBottom: "1rem", color: "#666" }}>I&apos;ll reply within 24 hours</p>
             <form onSubmit={handleSubmit}>
-
-              <input
-                type="hidden"
-                name="subject"
-                value="New Car Consultation Request"
-              />
-
-              <input
-                type="text"
-                name="name"
-                placeholder="Your Name"
-                value={form.name}
-                onChange={handleChange}
-                required
-              />
-
-              <input
-                type="email"
-                name="email"
-                placeholder="Email Address"
-                value={form.email}
-                onChange={handleChange}
-                required
-              />
-
-              <input
-                type="tel"
-                name="phone"
-                placeholder="Phone Number"
-                value={form.phone}
-                onChange={handleChange}
-                required
-              />
-             
+              <input type="hidden" name="subject" value="New Car Consultation Request" />
+              <input type="text" name="name" placeholder="Your Name" value={form.name} onChange={handleChange} required />
+              <input type="email" name="email" placeholder="Email Address" value={form.email} onChange={handleChange} required />
+              <input type="tel" name="phone" placeholder="Phone Number" value={form.phone} onChange={handleChange} required />
               <select name="budget" value={form.budget} onChange={handleChange} required>
                 <option value="">Select Budget</option>
                 <option>Under 5 Lakhs</option>
@@ -206,9 +200,7 @@ function App() {
                 <option>Not Sure</option>
               </select>
               <textarea name="message" placeholder="What car are you looking for?" rows="3" value={form.message} onChange={handleChange}></textarea>
-              <button type="submit" className="primary-btn" disabled={!isFormValid}>
-                Submit Request
-              </button>
+              <button type="submit" className="primary-btn" disabled={!isFormValid}>Submit Request</button>
             </form>
           </div>
         </div>
